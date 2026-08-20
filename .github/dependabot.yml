@@ -1,6 +1,7 @@
 version: 2
 
 updates:
+  # Python dependencies
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
@@ -10,6 +11,16 @@ updates:
       timezone: "Etc/UTC"
     open-pull-requests-limit: 5
 
+    # Keep Django on the current 5.2 LTS release line.
+    # Patch updates remain enabled, while regular minor/major
+    # version updates are intentionally ignored.
+    ignore:
+      - dependency-name: "Django"
+        update-types:
+          - "version-update:semver-minor"
+          - "version-update:semver-major"
+
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
