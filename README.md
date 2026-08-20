@@ -4,6 +4,7 @@
 
 **A multi-engine product extraction pipeline backed by Django and PostgreSQL.**
 
+[![CI](https://github.com/snakyv/braincomua-product-parser/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/snakyv/braincomua-product-parser/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-5.2-092E20?logo=django&logoColor=white)](https://www.djangoproject.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
@@ -98,10 +99,33 @@ The implementation is intentionally defensive against common scraping failures:
 
 ---
 
+## Continuous Integration
+
+Every push to `main` and every pull request targeting `main` runs a deterministic GitHub Actions quality gate. The workflow uses Python 3.12 and verifies the repository without contacting the live Brain.com.ua website:
+
+```text
+Static source audit
+        ↓
+Django system checks
+        ↓
+Python bytecode compilation
+        ↓
+CI status
+```
+
+The CI job intentionally does **not** execute the live Selenium or Playwright workflows. Browser extraction depends on an external website, network availability, and current DOM state, so those end-to-end checks remain explicit local validation steps.
+
+Dependency maintenance is handled by Dependabot for both Python packages and GitHub Actions on a weekly schedule.
+
+---
+
 ## Repository Structure
 
 ```text
 braincomua_project/
+├── .github/
+│   ├── workflows/ci.yml         # Deterministic GitHub Actions quality gate
+│   └── dependabot.yml           # Weekly dependency update automation
 ├── braincomua_project/          # Django project configuration
 ├── parser_app/                  # Product model and migrations
 ├── modules/
